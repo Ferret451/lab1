@@ -3,8 +3,7 @@ Program lab8InterimAnswers;
 {$APPTYPE CONSOLE}
 
 {
-  Using the functions (procedures) the program need to calculate the next
-  expression: 2 * (A + B) * (2 * B - A)
+
 }
 
 uses

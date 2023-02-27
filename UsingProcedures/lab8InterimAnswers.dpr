@@ -2,6 +2,11 @@ Program lab8InterimAnswers;
 
 {$APPTYPE CONSOLE}
 
+{
+  Using the functions (procedures) the program need to calculate the next
+  expression: 2 * (A + B) * (2 * B - A)
+}
+
 uses
   System.SysUtils;
 
@@ -10,14 +15,14 @@ Type
   TMatrix = array [1..3, 1..3] of Integer;
 
 Var
-  A, B, C, D: TMatrix;
+  A, B, C, D, RES: TMatrix;
   i, j: byte;
   isCorrectInput: Boolean;
 
   //A - first input matrix
   //B - second input matrix
-  //C - matrix for interim and final result
-  //D - matrix for interim results
+  //C, D - matrix for interim results
+  //RES - matrix for the final result
   //i, j - iterators for the cycles
   //isCorrectInput - boolean variable to check input for correctness
 
@@ -86,62 +91,37 @@ Begin
 End;
 
 //Procedure for summing two matrixes
-Function SumMatrixes (a, b: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of sum
-
+Procedure SumMatrixes (const a, b: TMatrix; var c: TMatrix);
 Begin
   //Summing the matrixes
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := a[i][j] + b[i][j];
-
-  result := res;
+      c[i][j] := a[i][j] + b[i][j];
 End;
 
 //Procedure for substract two matrixes
-Function SubMatrixes (a, b: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of substract
-
+Procedure SubMatrixes (const a, b: TMatrix; var c: TMatrix);
 Begin
   //Substract the matrixes
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := a[i][j] - b[i][j];
-
-
-
-  result := res;
+      c[i][j] := a[i][j] - b[i][j];
 End;
 
 //Procedure for multiplying number on matrix
-Function MultConstMatrix(Numb: byte; a: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of sum
-
+Procedure MultConstMatrix(const Numb: byte; const a: TMatrix; var b: TMatrix);
 Begin
   //Myltiplying number on matrix
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := Numb * a[i][j];
-
-  result := res;
+      b[i][j] := Numb * a[i][j];
 End;
 
 //Procedure for multiplying matrixes
-Function MultMatrixes(a, b: TMatrix): TMatrix;
+Procedure MultMatrixes(const a, b: TMatrix; var c: TMatrix);
 var
-  res: TMatrix;
   k: byte;
 
-  //res - result of sum
   //k - another iterator for cycles
 
 Begin
@@ -149,37 +129,24 @@ Begin
   for i := 1 to 3 do
     for j := 1 to 3 do
     begin
-      res[i][j] := 0;
+      c[i][j] := 0;
       for k := 1 to 3 do
-        res[i][j] := res[i][j] + a[i][k] * b[k][j];
+        c[i][j] := c[i][j] + a[i][k] * b[k][j];
     end;
-
-  result := res;
 End;
 
 //Procedure for outputting interim results
-Procedure InterimOutput(InterExpression: string; a: TMatrix);
+Procedure Output(const Expression: string; const a: TMatrix);
 Begin
-  writeln(InterExpression);
+  writeln(Expression);
 
-  for i := 1 to 3 do
-  begin
-    for j := 1 to 3 do
-      write(c[i][j]:10);
-    writeln;
-  end;
-  writeln;
-End;
-
-//Procedure for output the result
-Procedure Output(a: TMatrix);
-Begin
   for i := 1 to 3 do
   begin
     for j := 1 to 3 do
       write(a[i][j]:10);
     writeln;
   end;
+  writeln;
 End;
 
 Begin
@@ -187,24 +154,24 @@ Begin
   Input(A, B);
 
   //A + B
-  C := SumMatrixes(A, B);
-  InterimOutput('A + B =', C);
+  SumMatrixes(A, B, C);
+  Output('A + B =', C);
 
   //2 * (A + B)
-  C := MultConstMatrix(2, C);
-  InterimOutput('2 * (A + B) = ', C);
+  MultConstMatrix(2, C, C);
+  Output('2 * (A + B) = ', C);
 
   //2 * B
-  D := MultConstMatrix(2, B);
-  InterimOutput('2 * B = ', D);
+  MultConstMatrix(2, B, D);
+  Output('2 * B = ', D);
 
   //2 * B - A
-  D := SubMatrixes(D, A);
-  InterimOutput('2 * B - A = ', D);
+  SubMatrixes(D, A, D);
+  Output('2 * B - A = ', D);
 
   //2 * (A + B) * (2 * B - A)
-  C := MultMatrixes(C, D);
-
+  MultMatrixes(C, D, RES);
+  Output('2 * (A + B) * (2 * B - A) =', RES);
 
   readln;
   readln;

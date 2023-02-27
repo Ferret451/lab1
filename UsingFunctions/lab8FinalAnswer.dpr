@@ -2,6 +2,11 @@ Program lab8FinalAnswer;
 
 {$APPTYPE CONSOLE}
 
+{
+  Using the functions (procedures) the program need to calculate the next
+  expression: 2 * (A + B) * (2 * B - A)
+}
+
 Uses
   System.SysUtils;
 
@@ -10,12 +15,13 @@ Type
   TMatrix = array [1..3, 1..3] of Integer;
 
 Var
-  A, B, C: TMatrix;
+  A, B, RES: TMatrix;
   i, j: byte;
   isCorrectInput: Boolean;
 
   //A - first input matrix
   //B - second input matrix
+  //RES - result of the expression
   //i, j - iterators for the cycles
   //isCorrectInput - boolean variable to check input for correctness
 
@@ -84,77 +90,53 @@ Begin
 End;
 
 //Procedure for summing two matrixes
-Function SumMatrixes (a, b: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of sum
-
+Function SumMatrixes (const a, b: TMatrix): TMatrix;
 Begin
   //Summing the matrixes
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := a[i][j] + b[i][j];
-
-  result := res;
+      result[i][j] := a[i][j] + b[i][j];
 End;
 
 //Procedure for substract two matrixes
-Function SubMatrixes (a, b: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of substract
-
+Function SubMatrixes (const a, b: TMatrix): TMatrix;
 Begin
   //Substract the matrixes
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := a[i][j] - b[i][j];
+      result[i][j] := a[i][j] - b[i][j];
 
-  result := res;
 End;
 
 //Procedure for multiplying number on matrix
-Function MultConstMatrix(Numb: byte; a: TMatrix): TMatrix;
-var
-  res: TMatrix;
-
-  //res - result of sum
-
+Function MultConstMatrix(const Numb: byte; const a: TMatrix): TMatrix;
 Begin
   //Myltiplying number on matrix
   for i := 1 to 3 do
     for j := 1 to 3 do
-      res[i][j] := Numb * a[i][j];
-
-  result := res;
+      result[i][j] := Numb * a[i][j];
 End;
 
 //Procedure for multiplying matrixes
-Function MultMatrixes(a, b: TMatrix): TMatrix;
+Function MultMatrixes(const a, b: TMatrix): TMatrix;
 var
-  res: TMatrix;
   k: byte;
 
-  //res - result of sum
-  //k - another iterator for cycles
+  //k - another iterator for cycle
 
 Begin
   //Myltiplying the matrixes
   for i := 1 to 3 do
     for j := 1 to 3 do
     begin
-      res[i][j] := 0;
+      result[i][j] := 0;
       for k := 1 to 3 do
-        res[i][j] := res[i][j] + a[i][k] * b[k][j];
+        result[i][j] := result[i][j] + a[i][k] * b[k][j];
     end;
-
-  result := res;
 End;
 
 //Procedure for output the result
-Procedure Output(a: TMatrix);
+Procedure Output(const a: TMatrix);
 Begin
   for i := 1 to 3 do
   begin
@@ -169,12 +151,11 @@ Begin
   Input(A, B);
 
   //Counting the result
-  C := MultMatrixes(MultConstMatrix(2, SumMatrixes(A, B)), SubMatrixes(MultConstMatrix(2, B), A));
+  RES := MultMatrixes(MultConstMatrix(2, SumMatrixes(A, B)), SubMatrixes(MultConstMatrix(2, B), A));
 
   //Outputing the result
   writeln('2 * (A + B) * (2 * B - A) = ');
-  Output(C);
-
+  Output(RES);
 
   readln;
   readln;
